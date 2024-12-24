@@ -1,26 +1,42 @@
 [
-  {
-    "name":"Horizon UI PRO",
-    "status": "Approved",
-    "date": "18 Apr 2022",
-    "progress": 75.5  
-  },
-  {
-    "name":"Horizon UI Free",
-    "status": "Disable",
-    "date": "18 Apr 2022",
-    "progress": 25.5  
-  },
-  {
-    "name":"Marketplace",
-    "status": "Error",
-    "date": "20 May 2021",
-    "progress": 90  
-  },
-  {
-    "name":"Weekly Updates",
-    "status": "Approved",
-    "date": "12 Jul 2021",
-    "progress": 50.5  
-  }
-]
+    {
+      "issueId": 4365,
+      "pipelineStage": "Qualification",
+      "opportunityName": "[BDev] Click Clack Hotel",
+      "priority": "High",
+      "lastUpdate": "02/27/2024",
+      "nextAction": "04/12/2024"
+    },
+    {
+      "issueId": 4342,
+      "pipelineStage": "Proposal",
+      "opportunityName": "[BDev] PS Solutions",
+      "priority": "Low",
+      "lastUpdate": "01/11/2024",
+      "nextAction": "04/12/2024"
+    },
+    {
+      "issueId": 4236,
+      "pipelineStage": "Negotiation",
+      "opportunityName": "[Lead] Smart Additional",
+      "priority": "Medium",
+      "lastUpdate": "03/01/2024",
+      "nextAction": "04/12/2024"
+    },
+    {
+      "issueId": 4362,
+      "pipelineStage": "Analysis",
+      "opportunityName": "[Lead] TradeTracker",
+      "priority": "High",
+      "lastUpdate": "03/12/2024",
+      "nextAction": "04/12/2024"
+    },
+    {
+      "issueId": 4321,
+      "pipelineStage": "Estimation",
+      "opportunityName": "[Lead] Siberia Ingeniería",
+      "priority": "Critical",
+      "lastUpdate": "04/05/2024",
+      "nextAction": "04/12/2024"
+    }
+  ]

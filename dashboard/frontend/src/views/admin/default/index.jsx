@@ -1,188 +1,107 @@
-/*!
-  _   _  ___  ____  ___ ________  _   _   _   _ ___
- | | | |/ _ \|  _ \|_ _|__  / _ \| \ | | | | | |_ _|
- | |_| | | | | |_) || |  / / | | |  \| | | | | || |
- |  _  | |_| |  _ < | | / /| |_| | |\  | | |_| || |
- |_| |_|\___/|_| \_\___/____\___/|_| \_|  \___/|___|
-
-=========================================================
-* Horizon UI - v1.1.0
-=========================================================
-
-* Product Page: https://www.horizon-ui.com/
-* Copyright 2023 Horizon UI (https://www.horizon-ui.com/)
-
-* Designed and Coded by Simmmple
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
-
-// Chakra imports
+import React, { useState, useEffect } from "react";
 import {
-  Avatar,
   Box,
-  Flex,
-  FormLabel,
   Icon,
-  Select,
   SimpleGrid,
   useColorModeValue,
-} from '@chakra-ui/react';
-// Assets
-import Usa from 'assets/img/dashboards/usa.png';
-// Custom components
-import MiniCalendar from 'components/calendar/MiniCalendar';
-import MiniStatistics from 'components/card/MiniStatistics';
-import IconBox from 'components/icons/IconBox';
-import React, { useState } from 'react';
+  Flex,
+} from "@chakra-ui/react";
+import MiniStatistics from "../../../components/card/MiniStatistics";
+import IconBox from "../../../components/icons/IconBox";
 import {
-  MdAddTask,
+  MdHandshake,
+  MdOutlineAnalytics,
+  MdChecklistRtl,
   MdAttachMoney,
   MdBarChart,
-  MdFileCopy,
-} from 'react-icons/md';
-import CheckTable from 'views/admin/default/components/CheckTable';
-import ComplexTable from 'views/admin/default/components/ComplexTable';
-import DailyTraffic from 'views/admin/default/components/DailyTraffic';
-import PieCard from 'views/admin/default/components/PieCard';
-import Tasks from 'views/admin/default/components/Tasks';
-import TotalSpent from 'views/admin/default/components/TotalSpent';
-import WeeklyRevenue from 'views/admin/default/components/WeeklyRevenue';
-import {
-  columnsDataCheck,
-  columnsDataComplex,
-} from 'views/admin/default/variables/columnsData';
-import tableDataCheck from 'views/admin/default/variables/tableDataCheck.json';
-import tableDataComplex from 'views/admin/default/variables/tableDataComplex.json';
+  MdCoPresent,
+  MdBusinessCenter,
+  MdOutlineWineBar,
+} from "react-icons/md";
+import axios from "axios";
+import ComplexTable from "./components/ComplexTable";
+import DailyTraffic from "./components/DailyTraffic";
+import WeeklyRevenue from "./components/WeeklyRevenue";
+import { columnsDataComplex } from "./variables/columnsData";
+import MapVehicle from "./components/MapVehicle";
 
-import MapVehicle from 'views/admin/default/components/MapVehicle';
+import { opportunityOwners } from "../../../variables/OpportunityOwners";
 
-export default function UserReports() {
+import ConversionRate from "./components/metrics/ConversionRate";
+import SalesCycle from "./components/metrics/SalesCycle";
+import LtvAverage from "./components/metrics/LtvAverage";
+
+import CurrentPipelineValue from "./components/metrics/CurrentPipelineValue";
+import CurrentPipelineSize from "./components/metrics/CurrentPipelineSize";
+import MontlyWon from "./components/metrics/MontlyWon";
+import StageTimes from "./components/metrics/StageTimes";
+
+const MainDashboard = () => {
+  const [tableDataComplex, setTableDataComplex] = useState([]);
+  const [selectedOwner, setSelectedOwner] = useState(opportunityOwners[0].name);
+
   // Chakra Color Mode
-  const brandColor = useColorModeValue('brand.500', 'white');
-  const boxBg = useColorModeValue('secondaryGray.300', 'whiteAlpha.100');
+  const brandColor = useColorModeValue("brand.500", "white");
+  const boxBg = useColorModeValue("secondaryGray.300", "whiteAlpha.100");
 
   const [center] = useState({ lat: -15.15514, lng: -75.060448 });
-  const [points] = useState([
-    { lat: -15.155274, lng: -75.062056 },
-    { lat: -15.156013, lng: -75.0602 },
-    { lat: -15.154425, lng: -75.05752 },
-  ]);
+
+  const vehicles = [];
+
+  useEffect(() => {
+    if (selectedOwner) {
+      axios
+        .get(`http://localhost:5002/api_dw/next-actions/${selectedOwner}`)
+        .then((response) => {
+          setTableDataComplex(response.data);
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.error("There was an error fetching the issues!", error);
+          console.log(response.data);
+        });
+    }
+  }, [selectedOwner]);
 
   return (
-    <Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
-      <SimpleGrid
-        columns={{ base: 1, md: 2, lg: 3, '2xl': 6 }}
-        gap="20px"
-        mb="20px"
-      >
-        <MiniStatistics
-          startContent={
-            <IconBox
-              w="56px"
-              h="56px"
-              bg={boxBg}
-              icon={
-                <Icon w="32px" h="32px" as={MdBarChart} color={brandColor} />
-              }
-            />
-          }
-          name="Earnings"
-          value="$350.4"
-        />
-        <MiniStatistics
-          startContent={
-            <IconBox
-              w="56px"
-              h="56px"
-              bg={boxBg}
-              icon={
-                <Icon w="32px" h="32px" as={MdAttachMoney} color={brandColor} />
-              }
-            />
-          }
-          name="Spend this month"
-          value="$642.39"
-        />
-        <MiniStatistics growth="+23%" name="Sales" value="$574.34" />
-        <MiniStatistics
-          endContent={
-            <Flex me="-16px" mt="10px">
-              <FormLabel htmlFor="balance">
-                <Avatar src={Usa} />
-              </FormLabel>
-              <Select
-                id="balance"
-                variant="mini"
-                mt="5px"
-                me="0px"
-                defaultValue="usd"
-              >
-                <option value="usd">USD</option>
-                <option value="eur">EUR</option>
-                <option value="gba">GBA</option>
-              </Select>
-            </Flex>
-          }
-          name="Your balance"
-          value="$1,000"
-        />
-        <MiniStatistics
-          startContent={
-            <IconBox
-              w="56px"
-              h="56px"
-              bg="linear-gradient(90deg, #4481EB 0%, #04BEFE 100%)"
-              icon={<Icon w="28px" h="28px" as={MdAddTask} color="white" />}
-            />
-          }
-          name="New Tasks"
-          value="154"
-        />
-        <MiniStatistics
-          startContent={
-            <IconBox
-              w="56px"
-              h="56px"
-              bg={boxBg}
-              icon={
-                <Icon w="32px" h="32px" as={MdFileCopy} color={brandColor} />
-              }
-            />
-          }
-          name="Total Projects"
-          value="2935"
-        />
-      </SimpleGrid>
+    <Box pt={{ base: "130px", md: "80px", xl: "80px" }}>
+      <Flex direction="column" h="100vh">
+        <SimpleGrid
+          columns={{ base: 1, md: 2, lg: 4, "2xl": 6 }}
+          gap="20px"
+          mb="20px"
+        >
+          <ConversionRate />
+          <SalesCycle />
+          <LtvAverage />
 
-      <SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap="20px" mb="20px">
-        <MapVehicle center={center} points={points} />
-        <TotalSpent />
-        <TotalSpent />
+          <MontlyWon />
+          <CurrentPipelineValue />
+          <CurrentPipelineSize />
+        </SimpleGrid>
+
+        {/* <SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap="20px" mb="20px">
+        <DailyTraffic />
         <WeeklyRevenue />
-      </SimpleGrid>
+      </SimpleGrid> */}
 
-      <SimpleGrid columns={{ base: 1, md: 1, xl: 2 }} gap="20px" mb="20px">
-        <CheckTable columnsData={columnsDataCheck} tableData={tableDataCheck} />
-        <SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap="20px">
-          <DailyTraffic />
-          <PieCard />
+        <SimpleGrid
+          columns={{ base: 1, md: 1, xl: 1 }}
+          gap="20px"
+          mb="20px"
+          flex="1"
+        >
+          <MapVehicle center={center} vehicles={vehicles} />
         </SimpleGrid>
-      </SimpleGrid>
-
-      <SimpleGrid columns={{ base: 1, md: 1, xl: 2 }} gap="20px" mb="20px">
-        <ComplexTable
-          columnsData={columnsDataComplex}
-          tableData={tableDataComplex}
-        />
-        <SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap="20px">
-          <Tasks />
-          <MiniCalendar h="100%" minW="100%" selectRange={false} />
-        </SimpleGrid>
-      </SimpleGrid>
+        {/* <ComplexTable
+        columnsData={columnsDataComplex}
+        tableData={tableDataComplex}
+        tableName="Acciones Pendientes"
+        onSelectOwner={(ownerName) => setSelectedOwner(ownerName)}
+      /> */}
+      </Flex>
     </Box>
   );
-}
+};
+
+export default MainDashboard;
